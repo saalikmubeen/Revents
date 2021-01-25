@@ -6,6 +6,7 @@ import App from './App';
 import 'semantic-ui-css/semantic.min.css';
 import './index.css';
 import configureStore from './store/configureStore';
+import ScrollToTop from './components/ScrollToTop';
 
 const store = configureStore();
 
@@ -13,6 +14,7 @@ const store = configureStore();
 ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
+            <ScrollToTop />
             <App />
         </BrowserRouter>
     </Provider>, document.getElementById('root'));
