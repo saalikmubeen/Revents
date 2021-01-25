@@ -1,10 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Icon, Item, List, Segment, Image } from 'semantic-ui-react';
+import { useDispatch } from 'react-redux';
+import { deleteEvent } from '../actions/eventsActions';
 
 const EventsListItem = ({ event }) => {
+  const dispatch = useDispatch();
+
     return (
-       <Segment.Group>
+      <Segment.Group>
                 <Segment>
                   <Item.Group>
                     <Item>
@@ -12,7 +16,7 @@ const EventsListItem = ({ event }) => {
                       <Item.Content>
                             <Item.Header as="a">{ event.title}</Item.Header>
                         <Item.Description>
-                           {event.hostedBy}
+                            {event.hostedBy}
                         </Item.Description>
                       </Item.Content>
                     </Item>
@@ -26,7 +30,7 @@ const EventsListItem = ({ event }) => {
                 </Segment>
                 <Segment secondary>
                   <List horizontal>
-                    {event.attendees.map((attendee) => {
+                    {event.attendees && event.attendees.map((attendee) => {
                         return <List.Item as={Link} to={`/profile/${attendee.id}`} key={attendee.id}>
                             <Image size='mini' circular src={attendee.photoURL} />
                         </List.Item>
@@ -35,8 +39,8 @@ const EventsListItem = ({ event }) => {
                 </Segment>
                 <Segment clearing>
                   <p>{event.description}</p>
-                  <Button as="a" color="teal" floated="right" content="View" />
-                  <Button as="a" color="red" floated="right" content="Delete" />
+                  <Button as={Link} to={`/events/${event.id}`} color="teal" floated="right" content="View" />
+                  <Button color="red" floated="right" content="Delete" onClick={() => dispatch(deleteEvent(event.id))} />
                 </Segment>
               </Segment.Group>
     )

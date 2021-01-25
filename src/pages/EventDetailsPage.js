@@ -1,27 +1,35 @@
 import React from 'react'
 import { Grid } from 'semantic-ui-react';
+import { useSelector } from 'react-redux';
 import EventDetailsChat from '../components/EventDetailsChat';
 import EventDetailsHeader from '../components/EventDetailsHeader';
 import EventDetailsInfo from '../components/EventDetailsInfo';
 import EventDetailsSidebar from '../components/EventDetailsSidebar';
-import events from '../eventsData';
 
 
-const EventDetailsPage = () => {
-    const event = events[0]
+const EventDetailsPage = ({ match }) => {
+
+    const events = useSelector((state) => state.events); 
+    const event = events.filter((event) => event.id === match.params.id)[0];
+
+  
     return (
-        <Grid>
-        <Grid.Column width={10}>
-        <EventDetailsHeader event={event} />
-        <EventDetailsInfo event={event} />
-        <EventDetailsChat eventId={event.id} />
-        </Grid.Column>
-        <Grid.Column width={6}>
-        <EventDetailsSidebar
-          attendees={event?.attendees}
-        />
-      </Grid.Column>
-    </Grid>
+        <>
+        {event &&
+          <Grid>
+            <Grid.Column width={10}>
+              <EventDetailsHeader event={event} />
+              <EventDetailsInfo event={event} />
+              <EventDetailsChat event={event} />
+            </Grid.Column>
+            <Grid.Column width={6}>
+              <EventDetailsSidebar
+                attendees={event?.attendees}
+              />
+            </Grid.Column>
+          </Grid>
+        }
+       </> 
     )
 }
 

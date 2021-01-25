@@ -19,7 +19,7 @@ const App = () => {
             <NavBar />
             <Container className='main'>
               <Route exact path='/events' component={EventsPage} />
-              <Route path="/createEvent" component={ EventForm}/>
+              <Route path={['/createEvent', '/manageEvent/:id']} component={ EventForm}/>
               <Route path='/events/:id' component={EventDetailsPage} />
             </Container>
           </>

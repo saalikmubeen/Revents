@@ -5,7 +5,7 @@ const eventsReducer = (state = events, action) => {
         case "CREATE_EVENT": 
             return [...state, action.payload.event]
         case "UPDATE_EVENT":
-            return state.map((event) => event.id === action.payload.id ? action.payload.event : event)
+            return state.map((event) => event.id === action.payload.id ? { ...event, ...action.payload.event } : event)
         case "DELETE_EVENT":
             return state.filter((event) => event.id !== action.payload.id)
         default: 

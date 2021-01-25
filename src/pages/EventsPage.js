@@ -10,6 +10,7 @@ const EventsPage = () => {
             </Grid.Column>
             
             <Grid.Column width={6}>
+                <h2>Activity Feed</h2>
             </Grid.Column>
     </Grid>
     )

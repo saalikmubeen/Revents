@@ -1,9 +1,9 @@
 import React from 'react'
 import EventFormComponent from '../components/EventForm';
 
-const EventForm = () => {
+const EventForm = ({ match, history }) => {
     return (
-        <EventFormComponent/>
+        <EventFormComponent match={match} history={history} />
     )
 }
 

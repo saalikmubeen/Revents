@@ -13,11 +13,11 @@ const EventDetailsSidebar = ({attendees}) => {
                 inverted
                 color='teal'
               >
-                {attendees.length} {attendees.length > 1 ? 'People' : 'Person'} Going
+                {attendees && attendees.length && attendees.length > 1 ? 'People' : 'Person'} Going
               </Segment>
               <Segment attached>
                  <Item.Group relaxed divided>
-                    {attendees.map((attendee) => (
+                    {attendees && attendees.map((attendee) => (
                     <Item as={Link} to={`/profile/${attendee.id}`} key={attendee.id} style={{ position: 'relative' }}>
                     <Label style={{position: 'absolute'}} color='orange' ribbon='right' content='Host' />
               <Item.Image
