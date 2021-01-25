@@ -24,7 +24,7 @@ const EventsListItem = ({ event }) => {
                 </Segment>
                 <Segment>
                   <span>
-                    <Icon name="clock" /> {event.date} |
+                    <Icon name="clock" /> {event.date.toString()} |
                     <Icon name="marker" /> {event.venue}
                   </span>
                 </Segment>

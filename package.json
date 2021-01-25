@@ -9,6 +9,7 @@
         "firebase": "^4.2.0",
         "moment": "^2.29.1",
         "react": "^16.13.1",
+        "react-datepicker": "^3.4.1",
         "react-dom": "^16.13.1",
         "react-redux": "^7.2.2",
         "react-router-dom": "^5.2.0",
