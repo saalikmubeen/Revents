@@ -84,7 +84,7 @@ const EventForm = ({ match, history }) => {
         
                   <Form.Field>
                     <label>Description</label>
-                    <textarea placeholder="Tell us about your event" value={description} onChange={(e) => setDescription(e.target.value)} required/>
+                    <textarea placeholder="Tell us about your event" value={description} onChange={(e) => setDescription(e.target.value)} required rows={5}/>
                   </Form.Field>
         
                   <Header sub color='teal' content="Event Location Details"/>   

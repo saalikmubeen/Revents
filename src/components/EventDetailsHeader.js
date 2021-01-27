@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { Segment, Image, Item, Header, Button } from 'semantic-ui-react';
+import moment from 'moment';
 
 
 const eventImageStyle = {
@@ -32,7 +33,7 @@ const EventDetailsHeader = ({ event }) => {
                           content={event.title}
                           style={{ color: 'white' }}
                         />
-                        <p>{event.date.toString()}</p>
+                        <p>{moment(event.date).format("ddd, MMMM Do YYYY, h:mm:ss a")}</p>
                         <p>
                             Hosted by <strong>{event.hostedBy}</strong>
                         </p>

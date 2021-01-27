@@ -1,13 +1,17 @@
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { eventsReducer } from '../reducers/eventsReducer';
+import { reducer as toastrReducer } from 'react-redux-toastr';
+import thunk from 'redux-thunk';
+
+var composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
     combineReducers({
-        events: eventsReducer
+        events: eventsReducer,
+        toastr: toastrReducer
     }),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    composeEnhancers(applyMiddleware(thunk))
 );
-
 
 const configureStore = () => store;
 

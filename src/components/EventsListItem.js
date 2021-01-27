@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button, Icon, Item, List, Segment, Image } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
 import { deleteEvent } from '../actions/eventsActions';
+import moment from 'moment';
 
 const EventsListItem = ({ event }) => {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const EventsListItem = ({ event }) => {
                 </Segment>
                 <Segment>
                   <span>
-                    <Icon name="clock" /> {event.date.toString()} |
+                    <Icon name="clock" /> {moment(event.date).format("ddd, MMMM Do YYYY, h:mm:ss a")} |
                     <Icon name="marker" /> {event.venue}
                   </span>
                 </Segment>

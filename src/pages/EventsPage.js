@@ -1,5 +1,6 @@
 import React from 'react'
 import { Grid } from 'semantic-ui-react';
+import EventActivity from '../components/EventActivity';
 import EventsList from '../components/EventsList';
 
 const EventsPage = () => {
@@ -10,7 +11,7 @@ const EventsPage = () => {
             </Grid.Column>
             
             <Grid.Column width={6}>
-                <h2>Activity Feed</h2>
+                <EventActivity />
             </Grid.Column>
     </Grid>
     )
