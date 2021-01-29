@@ -9,7 +9,7 @@ const AccountPage = () => {
     const [error, setError] = useState(null);
 
     const dispatch = useDispatch();
-    const authProvider = useSelector((state) => state.firebase.auth.providerData[0].providerId);
+    const authProvider = useSelector((state) => state.firebase.auth.providerData && state.firebase.auth.providerData[0].providerId);
 
     const handleSubmit = (e) => {
         e.preventDefault();
