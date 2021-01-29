@@ -1,11 +1,16 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom';
 import { Button, Container, Menu } from 'semantic-ui-react'
+import { useSelector } from 'react-redux';
 import SignedInMenu from './SignedInMenu';
 import SignedOutMenu from './SignedOutMenu';
 
 const NavBar = () => {
-  const authenticated = false;
+  const auth = useSelector((state) => state.firebase.auth);
+  const profile = useSelector((state) => state.firebase.profile);
+
+  const authenticated = auth.isLoaded && !auth.isEmpty;
+
     return (
        <Menu inverted fixed='top'>
       <Container>
@@ -21,7 +26,7 @@ const NavBar = () => {
           </Menu.Item>
         )}
         {authenticated ? (
-          <SignedInMenu />
+            <SignedInMenu profile={profile} />
         ) : (
           <SignedOutMenu />
         )}

@@ -44,8 +44,6 @@ export const fetchEvents = () => {
         
         const firebase = getFirebase();
 
-        console.log(firebase)
-
         
         const snapshot = await firebase.ref('events').once('value');
         

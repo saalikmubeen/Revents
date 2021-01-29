@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Button, Divider, Form } from 'semantic-ui-react';
 import ModalWrapper from './modals/ModalWrapper';
 import SocialLogin from './SocialLogin';
+import { loginUser } from '../actions/authActions';
 
 
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = () => {
+    const dispatch = useDispatch();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        dispatch(loginUser(email, password));
 
     }
 
@@ -29,10 +36,11 @@ const LoginForm = () => {
 
             <Button positive type="submit" fluid size="large" color="teal"> Login </Button>
 
-            <Divider horizontal>Or</Divider>
+            </Form>
+
+            <Divider horizontal>OR</Divider>
 
             <SocialLogin />
-            </Form>
             
         </ModalWrapper>    
     )

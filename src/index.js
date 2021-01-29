@@ -11,6 +11,7 @@ import './index.css';
 import configureStore from './store/configureStore';
 import ScrollToTop from './components/ScrollToTop';
 import { rrfProps } from './store/configureStore';
+import AuthIsLoaded from './components/AuthIsLoaded';
 
 const store = configureStore();
 
@@ -30,7 +31,9 @@ ReactDOM.render(
                 transitionOut="fadeOut"
                 progressBar
                 closeOnToastrClick/>
-            <App />
+            <AuthIsLoaded>
+                <App/>        
+           </AuthIsLoaded>
         </BrowserRouter>
         </ReactReduxFirebaseProvider>
     </Provider>, document.getElementById('root'));

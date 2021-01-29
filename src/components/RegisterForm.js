@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Button, Divider, Form } from 'semantic-ui-react';
+import { registerUser } from '../actions/authActions';
 import ModalWrapper from './modals/ModalWrapper';
 import SocialLogin from './SocialLogin';
 
@@ -9,8 +11,12 @@ const RegisterForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = () => {
+    const dispatch = useDispatch();
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        
+        dispatch(registerUser({ name, email, password }));
     }
 
     return (
@@ -34,10 +40,10 @@ const RegisterForm = () => {
 
             <Button positive type="submit" fluid size="large" color="teal"> Register </Button>
 
+        </Form>
             <Divider horizontal>Or</Divider>
             
-            <SocialLogin />
-        </Form>
+            <SocialLogin />    
         </ModalWrapper>    
     )
 }
