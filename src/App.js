@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
+import ModalManager from './components/modals/ModalManager';
 import NavBar from './components/NavBar';
 import EventDetailsPage from './pages/EventDetailsPage';
 import EventForm from './pages/EventForm';
@@ -11,6 +12,7 @@ import HomePage from './pages/HomePage'
 const App = () => {
   return (
     <>
+       <ModalManager/>
       <Route path="/" exact component={HomePage} />
       <Route
         path={'/(.+)'}

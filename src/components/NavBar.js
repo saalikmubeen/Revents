@@ -5,7 +5,7 @@ import SignedInMenu from './SignedInMenu';
 import SignedOutMenu from './SignedOutMenu';
 
 const NavBar = () => {
-  const authenticated = true;
+  const authenticated = false;
     return (
        <Menu inverted fixed='top'>
       <Container>
