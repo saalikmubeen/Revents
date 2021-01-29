@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Header, Segment, Select } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { v4 as uuid } from 'uuid';
 import DatePicker from 'react-datepicker';
 import { createEvent, updateEvent } from '../actions/eventsActions';
 import "react-datepicker/dist/react-datepicker.css";
@@ -41,7 +40,7 @@ const EventForm = ({ match, history }) => {
           history.push(`/events/${eventId}`);
       } else {
         console.log(eventObj)
-        dispatch(createEvent({ ...eventObj, hostPhotoURL: '/assets/images/user.png', id: uuid() }));
+        dispatch(createEvent({ ...eventObj, hostPhotoURL: '/assets/images/user.png' }));
         history.push('/events')
       }
   }

@@ -3,15 +3,36 @@ import { eventsReducer } from '../reducers/eventsReducer';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 import thunk from 'redux-thunk';
 
-var composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+import { firebaseReducer, getFirebase } from 'react-redux-firebase';
+import { firebase }  from '../firebase/firebaseConfig';
+
+
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
     combineReducers({
         events: eventsReducer,
-        toastr: toastrReducer
+        toastr: toastrReducer,
+        firebase: firebaseReducer,
     }),
-    composeEnhancers(applyMiddleware(thunk))
+    composeEnhancers(
+        applyMiddleware(thunk.withExtraArgument({ getFirebase }))
+    )
 );
+
+
+const rrfConfig = {
+    userProfile: 'users',
+    attachAuthIsReady: true,  
+    // useFirestormForProfile: true // Firestore for Profile instead of Realtime DB
+}
+
+export const rrfProps = {
+firebase,
+config: rrfConfig,
+dispatch: store.dispatch
+}
 
 const configureStore = () => store;
 

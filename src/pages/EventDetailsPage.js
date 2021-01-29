@@ -8,9 +8,9 @@ import EventDetailsSidebar from '../components/EventDetailsSidebar';
 
 
 const EventDetailsPage = ({ match }) => {
-
-    const events = useSelector((state) => state.events); 
-    const event = events.filter((event) => event.id === match.params.id)[0];
+    
+    const events = useSelector((state) => state.events);
+  const event = events.filter((event) => event.id === match.params.id)[0];
 
   
     return (

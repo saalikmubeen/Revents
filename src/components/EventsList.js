@@ -1,13 +1,21 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import EventsListItem from './EventsListItem';
+import { fetchEvents } from '../actions/eventsActions';
 
 const EventsList = () => {
+    const dispatch = useDispatch();
     const events = useSelector((state) => state.events)
+
+
+    useEffect(() => {
+        dispatch(fetchEvents());
+
+    }, [dispatch]);
 
     return (
         <>
-            {events.map((event) => <EventsListItem event={event} key={ event.id } />)}
+            {events && events.map((event) => <EventsListItem event={event} key={ event.id } />)}
         </>
     )
 }

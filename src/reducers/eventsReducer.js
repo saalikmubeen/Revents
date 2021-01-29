@@ -1,7 +1,9 @@
-import events from '../eventsData';
+// import events from '../eventsData';
 
-const eventsReducer = (state = events, action) => {
+const eventsReducer = (state = [], action) => {
     switch (action.type) {
+        case "FETCH_EVENTS":
+            return [...action.payload.events]
         case "CREATE_EVENT": 
             return [...state, action.payload.event]
         case "UPDATE_EVENT":
