@@ -21,8 +21,7 @@ body {
     font-size: 4em;
 }
 
-
-/* .react-datepicker-wrapper {
+.react-datepicker-wrapper {
     width: 100%;
 }
 
@@ -30,4 +29,16 @@ body {
     width: 100%;
     border: none;
     box-shadow: 0 1px 2px 0 rgba(34, 36, 38, .15);
-} */
+}
+
+.dropzone {
+    border: 3px dashed #eaeaea;
+    border-radius: 5px;
+    padding-top: 30px;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.dropzone--isActive {
+    border: 3px dashed rgb(33, 138, 174);
+}

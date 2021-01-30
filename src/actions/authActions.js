@@ -26,6 +26,7 @@ export const registerUser = (userObj) => {
 
             await firebase.auth().createUserWithEmailAndPassword(userObj.email, userObj.password);
 
+
             const user = firebase.auth().currentUser;
 
             // updating user inside firebase auth
@@ -126,6 +127,47 @@ export const updateProfile = (user) => {
 
         } catch (err) {
             console.log(err.message);
+        }
+    }
+}
+
+
+
+export const uploadProfilePhoto = (file, fileName) => {
+    return async function (dispatch, getState, { getFirebase }) {
+        try {
+            const firebase = getFirebase();
+            const user = firebase.auth().currentUser;
+
+            const filePath = `${user.uid}/user_images/${Date.now()}-${fileName}`;
+            
+            // uploading file to firebase storage
+            const storageRef = firebase.storage().ref()
+            const uploadTask = storageRef.child(filePath).put(file, { contentType: 'image/*' });
+
+
+            uploadTask.on('state_changed', snapshot => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+            }, error => {
+                toastr.error(error.message);
+            }, async () => {
+                    const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+
+                    // update user inside firebase database
+                    await firebase.updateProfile({
+                        photoURL: downloadURL
+                    })
+
+                    // updates user inside firebase auth
+                    await user.updateProfile({
+                        photoURL: downloadURL,
+                    })
+
+                    toastr.success("Success!", "Photo uploaded successfully!")
+    })
+        } catch (err) {
+            console.log(err);
         }
     }
 }

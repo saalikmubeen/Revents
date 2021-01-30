@@ -4,6 +4,7 @@ import { Grid, Header, Menu } from 'semantic-ui-react';
 import AboutPage from './AboutPage';
 import AccountPage from './AccountPage';
 import BasicsPage from './BasicsPage';
+import PhotosPage from './PhotosPage';
 
 const SettingsDashboard = () => {
     return (
@@ -13,6 +14,7 @@ const SettingsDashboard = () => {
                 <Route path="/account/settings" exact component={AccountPage} />
                 <Route path="/account/basics" exact component={BasicsPage} />
                 <Route path="/account/about" exact component={AboutPage} />
+                <Route path="/account/photos" exact component={PhotosPage} />
             </Grid.Column>
 
                 <Grid.Column width={4}>
@@ -20,7 +22,7 @@ const SettingsDashboard = () => {
                     <Header icon="user" attached inverted color="grey" content="Profile" />
                     <Menu.Item as={Link} to="/account/basics">Basics</Menu.Item>
                     <Menu.Item as={Link} to="/account/about">About Me</Menu.Item>
-                    <Menu.Item as={Link} to="/account/photos">My Photos</Menu.Item>
+                    <Menu.Item as={Link} to="/account/photos">Change Profile Photo</Menu.Item>
                 </Menu>
                 <Grid.Row />
                     <Menu vertical>
