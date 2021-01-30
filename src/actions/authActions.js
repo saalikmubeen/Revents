@@ -111,3 +111,21 @@ export const updatePassword = (newPassword) => {
         }
     }
 }
+
+
+
+export const updateProfile = (user) => {
+    return async function (dispatch, getState, { getFirebase }) {
+        try {
+            const firebase = getFirebase();
+  
+            // updates the user inside the firebase database;
+            await firebase.updateProfile(user);
+
+            toastr.success("Success!", "Your profile has been updated!");
+
+        } catch (err) {
+            console.log(err.message);
+        }
+    }
+}

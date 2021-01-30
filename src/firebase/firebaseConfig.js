@@ -2,7 +2,7 @@ import * as firebase from 'firebase';
 
 
 export const firebaseConfig = {
-    
+    // your firebase config details
 };
 
 

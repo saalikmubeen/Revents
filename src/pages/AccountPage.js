@@ -32,12 +32,12 @@ const AccountPage = () => {
                   <Form onSubmit={handleSubmit}>
                       <Form.Field>
                           <label>New Password</label>
-                          <input placeholder="New Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                          <input placeholder="New Password" value={password} onChange={(e) => setPassword(e.target.value)} required type="password"/>
                       </Form.Field>
             
                       <Form.Field>
                           <label>Confirm Password</label>
-                          <input placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                          <input placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required type="password" /> 
                       </Form.Field>
                       {error && (
                           <>

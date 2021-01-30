@@ -1,14 +1,18 @@
 import React from 'react'
 import { Link, Redirect, Route } from 'react-router-dom';
 import { Grid, Header, Menu } from 'semantic-ui-react';
+import AboutPage from './AboutPage';
 import AccountPage from './AccountPage';
+import BasicsPage from './BasicsPage';
 
 const SettingsDashboard = () => {
     return (
         <Grid>
             <Grid.Column width={12}>
-                <Redirect from="/account" to="/account/settings"/>
+                <Redirect from="/account" to="/account/basics"/>
                 <Route path="/account/settings" exact component={AccountPage} />
+                <Route path="/account/basics" exact component={BasicsPage} />
+                <Route path="/account/about" exact component={AboutPage} />
             </Grid.Column>
 
                 <Grid.Column width={4}>
