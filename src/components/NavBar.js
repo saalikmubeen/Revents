@@ -21,7 +21,7 @@ const NavBar = () => {
           <Menu.Item as={NavLink} to='/events' name='Events' />
           
         {authenticated ? (
-            <SignedInMenu profile={profile} />
+            <SignedInMenu profile={profile} auth={auth} />
         ) : (
           <SignedOutMenu />
         )}

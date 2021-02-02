@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { Segment, Image, Item, Header, Button } from 'semantic-ui-react';
 import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
+import { joinEvent, leaveEvent } from "../actions/eventsActions";
 
 
 const eventImageStyle = {
@@ -18,7 +20,22 @@ const eventImageTextStyle = {
 };
 
 
+
 const EventDetailsHeader = ({ event }) => {
+  const dispatch = useDispatch();
+  const currentUserUID = useSelector((state) => state.firebase.auth.uid)
+
+  const handleJoinEvent = () => {
+    dispatch(joinEvent(event.id));
+  }
+
+  const handleLeaveEvent = () => {
+    dispatch(leaveEvent(event.id));
+  }
+
+  const isAlreadyRegistered = event.attendees.some((attendee) => attendee.attendeeId === currentUserUID)
+
+
     return (
            <Segment.Group>
               <Segment basic attached="top" style={{ padding: '0' }}>
@@ -44,12 +61,16 @@ const EventDetailsHeader = ({ event }) => {
               </Segment>
         
               <Segment attached="bottom">
-                <Button>Cancel My Place</Button>
-                <Button color="teal">JOIN THIS EVENT</Button>
-        
-                <Button as={Link} to={`/manageEvent/${event.id}`} color="orange" floated="right">
-                  Manage Event
-                </Button>
+              {isAlreadyRegistered ?
+                  <Button onClick={handleLeaveEvent}>Cancel My Place</Button> :
+                  <Button color="teal" onClick={handleJoinEvent}>JOIN THIS EVENT</Button>
+              }
+                
+          {event.hostUid === currentUserUID &&
+            <Button as={Link} to={`/manageEvent/${event.id}`} color="orange" floated="right">
+              Manage Event
+              </Button>
+          }
               </Segment>
             </Segment.Group>
     )

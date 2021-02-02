@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Button, Form, Header, Segment, Select } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
-import { createEvent, updateEvent } from '../actions/eventsActions';
+import { useFirebaseConnect } from 'react-redux-firebase';
+import { cancelEvent, createEvent, updateEvent } from '../actions/eventsActions';
 import "react-datepicker/dist/react-datepicker.css";
+
 
 
 const categoryOptions = [
@@ -16,55 +18,62 @@ const categoryOptions = [
 ];
 
 
-const EventForm = ({ match, history }) => {
+const EventForm = ({ match, history, auth }) => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('')
   const [date, setDate] = useState('');
   const [city, setCity] = useState('');
   const [venue, setVenue] = useState('');
-  const [hostedBy, setHostedBy] = useState('');
-
-  const dispatch = useDispatch();
-  const events = useSelector((state) => state.events);
-
   const eventId = match.params.id;
+
+  useFirebaseConnect([`events`])
+  
+  const dispatch = useDispatch();
+  const events = useSelector((state) => state.firebase.ordered.events);
+  let event;
+
+  if (events && events.length > 0 && eventId) {
+    event = events.filter((event) => event.key === eventId)[0];
+
+    if (event.value.hostUid !== auth.uid) {
+        history.push("/events")
+    }
+  }
 
   const handleSubmit = (e) => {
       e.preventDefault();
       
-      const eventObj = { title, date, city, venue, hostedBy, description, category };
+      const eventObj = { title, date, city, venue, description, category };
     
       if (eventId) {
           dispatch(updateEvent(eventId, eventObj));
           history.push(`/events/${eventId}`);
       } else {
         console.log(eventObj)
-        dispatch(createEvent({ ...eventObj, hostPhotoURL: '/assets/images/user.png' }));
+        dispatch(createEvent({ ...eventObj }));
         history.push('/events')
       }
   }
 
   useEffect(() => {
-    if (eventId) {
-        const event = events.filter((event) => event.id === eventId)[0];
-        setTitle(event.title)
-        setDate(event.date)
-        setCity(event.city)
-        setVenue(event.venue)
-        setHostedBy(event.hostedBy)
-        setCategory(event.category)
-        setDescription(event.description)
+    if (eventId && event) {
+        setTitle(event.value.title)
+        setDate(event.value.date)
+        setCity(event.value.city)
+        setVenue(event.value.venue)
+        setCategory(event.value.category)
+        setDescription(event.value.description)
     } else {
         setTitle('')
         setDate('')
         setCity('')
         setVenue('')
-        setHostedBy('')
         setCategory('')
         setDescription('')
     }
-  }, [eventId, events])
+  }, [eventId, event])
+
 
   return (
             <Segment>
@@ -102,16 +111,17 @@ const EventForm = ({ match, history }) => {
                   <DatePicker selected={date ? new Date(date) : null} onChange={date => setDate(date)} showTimeSelect onChangeRaw={(e) => e.preventDefault() }
                       timeFormat="HH:mm" dateFormat="dd LLL yyy h:mm a" placeholderText="Event Date" required />
                   </Form.Field> 
-        
-                  <Form.Field>
-                    <label>Hosted By</label>
-                    <input placeholder="Enter the name of person hosting" value={hostedBy} onChange={(e) => setHostedBy(e.target.value)}required/>
-                  </Form.Field>
+      
                   <Button positive type="submit">
                     Submit
                   </Button>
+                  
                   <Button type="button" onClick={() => eventId ? history.push(`/events/${eventId}`) : history.push('/events')}>Cancel</Button>
+                  {eventId && event && event.value.cancelled ?
+                  <Button type="button" color="green" floated="right" onClick={() => dispatch(cancelEvent(eventId, false))}>Reactivate Event</Button> :
+                  <Button type="button" color="red" floated="right" onClick={() => dispatch(cancelEvent(eventId, true))}>Cancel Event</Button>}
                 </Form>
+               
               </Segment>
     )
 }

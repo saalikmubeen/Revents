@@ -8,6 +8,7 @@ import EventForm from './pages/EventForm';
 import EventsPage from './pages/EventsPage';
 import HomePage from './pages/HomePage'
 import SettingsDashboard from './pages/SettingsDashboard';
+import UserDetailedPage from './pages/UserDetailsPage';
 
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
               <Route path={['/createEvent', '/manageEvent/:id']} component={ EventForm}/>
               <Route path='/events/:id' component={EventDetailsPage} />
               <Route path="/account" component={SettingsDashboard} />
+              <Route path="/profile/:id" component={UserDetailedPage} />
             </Container>
           </>
         )}

@@ -1,62 +1,86 @@
 import { toastr } from 'react-redux-toastr';
-// import database from '../firebase/firebaseConfig';
+
 
 export const createEvent = (eventObj) => {
     return async function (dispatch, getState, { getFirebase }) {
         const firebase = getFirebase();
+        const user = firebase.auth().currentUser
+
+        const newEvent = {
+            ...eventObj,
+            hostUid: user.uid,
+            hostedBy: user.displayName,
+            hostPhotoURL: user.photoURL || null,
+        }
         
-        await firebase.ref('events').push({ ...eventObj })
+        const docRef = await firebase.ref('events').push({ ...newEvent });
 
-
-        dispatch({ type: "CREATE_EVENT", payload: { event: eventObj } });
+        await firebase.ref(`events/${docRef.key}/attendees/${user.uid}`).set({
+            attendeeId: user.uid,
+            displayName: user.displayName,
+            photoURL: user.photoURL || null,
+            going: true, 
+            host: true,
+            joinDate: Date.now()
+        })
         
         toastr.success('Success!', 'Event has been created!');
     }
 }
+
+
 
 export const updateEvent = (eventId, eventObj) => {
     return async function (dispatch, getState, { getFirebase }) {
         const firebase = getFirebase();
 
         await firebase.ref(`events/${eventId}`).update({ ...eventObj })
-
-        dispatch({ type: "UPDATE_EVENT", payload: { id: eventId, event: eventObj } });
         
         toastr.success('Success!', 'Event has been updated!');
     }
 }
 
-export const deleteEvent = (eventId) => {
+
+export const joinEvent = (eventId) => {
     return async function (dispatch, getState, { getFirebase }) {
         const firebase = getFirebase();
+        const user = firebase.auth().currentUser;
 
-        await firebase.ref(`events/${eventId}`).remove();
+        await firebase.ref(`events/${eventId}/attendees/${user.uid}`).set({
+            attendeeId: user.uid,
+            displayName: user.displayName,
+            photoURL: user.photoURL || null,
+            going: true, 
+            host: false,
+            joinDate: Date.now()
+        })
 
-        dispatch({ type: "DELETE_EVENT", payload: { id: eventId } })
-        
-        toastr.error("Deleted", 'Event has been deleted!');
+        toastr.success("Success", "Your place has been booked!");
+    }
+}
+
+export const leaveEvent = (eventId) => {
+    return async function (dispatch, getState, { getFirebase }) {
+        const firebase = getFirebase();
+        const user = firebase.auth().currentUser;
+
+        await firebase.ref(`events/${eventId}/attendees/${user.uid}`).remove();
+
+        toastr.success("Success", "Your have left the event !");
+
     }
 }
 
 
-export const fetchEvents = () => {
+export const cancelEvent = (eventId, isCancelled) => {
     return async function (dispatch, getState, { getFirebase }) {
-        
         const firebase = getFirebase();
 
-        
-        const snapshot = await firebase.ref('events').once('value');
-        
-        const events = [];
+        await firebase.ref(`events/${eventId}`).update({
+            cancelled: isCancelled
+        });
 
-        snapshot.forEach((childSnapshot) => {
-            console.log(childSnapshot.key)
-            events.push({
-                ...childSnapshot.val(),
-                id: childSnapshot.key,
-            })
-        })
+        toastr.success("Success", "Event cancelled successfully!");
 
-        dispatch({ type: "FETCH_EVENTS", payload: { events: events } });
     }
 }

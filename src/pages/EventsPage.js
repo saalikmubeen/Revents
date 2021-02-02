@@ -1,13 +1,36 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
+import { isEmpty, isLoaded, useFirebaseConnect } from 'react-redux-firebase';
 import { Grid } from 'semantic-ui-react';
 import EventActivity from '../components/EventActivity';
 import EventsList from '../components/EventsList';
+import Loading from '../components/Loading';
 
 const EventsPage = () => {
+
+     useFirebaseConnect([
+       'events'       // { path: '/events' } // object notation
+    ])
+
+
+    const firebaseEvents = useSelector((state) => state.firebase.ordered.events);
+
+    let events;
+
+    if (isLoaded(firebaseEvents) && !isEmpty(firebaseEvents)) {
+        events = firebaseEvents.map((event) => {
+            return { id: event.key, ...event.value, attendees: Object.values(event.value.attendees) }
+        });
+    }
+
+    if (!isLoaded(firebaseEvents)) {
+        return <Loading/>
+    }
+
     return (
-        <Grid>
+        <Grid columns={2} stackable>
             <Grid.Column width={10}>
-                <EventsList/>
+                <EventsList events={ events }/>
             </Grid.Column>
             
             <Grid.Column width={6}>

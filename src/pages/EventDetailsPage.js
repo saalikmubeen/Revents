@@ -5,26 +5,40 @@ import EventDetailsChat from '../components/EventDetailsChat';
 import EventDetailsHeader from '../components/EventDetailsHeader';
 import EventDetailsInfo from '../components/EventDetailsInfo';
 import EventDetailsSidebar from '../components/EventDetailsSidebar';
+import { useFirebaseConnect, isEmpty, isLoaded } from 'react-redux-firebase';
+import Loading from '../components/Loading';
 
 
 const EventDetailsPage = ({ match }) => {
-    
-    const events = useSelector((state) => state.events);
-  const event = events.filter((event) => event.id === match.params.id)[0];
 
+    useFirebaseConnect([
+       `events`       // { path: '/events' } // object notation
+    ])
+    
+    const events = useSelector((state) => state.firebase.ordered.events);
+
+    let eventDetails;
+    if (isLoaded(events) && !isEmpty(events)) {
+      const event = events.filter((event) => event.key === match.params.id)[0];
+      eventDetails = event ? {...event.value, id: event.key,  attendees: Object.values(event.value.attendees)} : undefined
+  }
+  
+  if (!isLoaded(events)) {
+    return <Loading />
+  }
   
     return (
         <>
-        {event &&
-          <Grid>
+        {eventDetails &&
+          <Grid columns={2} stackable>
             <Grid.Column width={10}>
-              <EventDetailsHeader event={event} />
-              <EventDetailsInfo event={event} />
-              <EventDetailsChat event={event} />
+              <EventDetailsHeader event={eventDetails} />
+              <EventDetailsInfo event={eventDetails} />
+              <EventDetailsChat event={eventDetails} />
             </Grid.Column>
             <Grid.Column width={6}>
               <EventDetailsSidebar
-                attendees={event?.attendees}
+                event={eventDetails}
               />
             </Grid.Column>
           </Grid>
