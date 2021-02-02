@@ -84,3 +84,20 @@ export const cancelEvent = (eventId, isCancelled) => {
 
     }
 }
+
+
+export const addComment = (eventId, text) => {
+    return async function (dispatch, getState, { getFirebase }) {
+        const firebase = getFirebase();
+        
+        const user = firebase.auth().currentUser;
+
+        await firebase.ref(`comments/${eventId}`).push({
+            text: text,
+            userUid: user.uid,
+            author: user.displayName,
+            photoURL: user.photoURL,
+            commentedAt: Date.now()
+        })
+    }
+}

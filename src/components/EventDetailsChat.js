@@ -1,7 +1,43 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { isEmpty, isLoaded, useFirebaseConnect } from 'react-redux-firebase';
 import { Header, Segment, Comment, Form, Button } from 'semantic-ui-react';
+import moment from 'moment';
+import { addComment } from '../actions/eventsActions';
+import { Link } from 'react-router-dom';
 
-const EventDetailsChat = () => {
+const EventDetailsChat = ({ event }) => {
+
+  useFirebaseConnect([
+      `comments/${event.id}`
+  ])
+
+
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.firebase.auth);
+  const firebaseComments = useSelector((state) => state.firebase.ordered.comments);
+
+  let comments = [];
+
+  if (isLoaded(firebaseComments) && !isEmpty(firebaseComments)) {
+    comments = firebaseComments[event.id] && firebaseComments[event.id].map((comment) => {
+      return { id: comment.key, ...comment.value }
+    })
+  }
+
+  const [comment, setComment] = useState('');
+
+  const handleAddComment = (e) => {
+    e.preventDefault();
+    
+    if (comment) {
+      dispatch(addComment(event.id, comment));
+    }
+
+    setComment('');
+  }
+
+
     return (
             <div>
               <Segment
@@ -11,81 +47,40 @@ const EventDetailsChat = () => {
                 color="teal"
                 style={{ border: 'none' }}
               >
-                <Header>Chat about this event</Header>
+                <Header>Comments about this event</Header>
               </Segment>
         
               <Segment attached>
                 <Comment.Group>
-                  <Comment>
-                    <Comment.Avatar src="/assets/images/user.png" />
+                  {comments && comments.map((comment) => {
+                  return (
+                  <Comment key={comment.id}>
+                      <Comment.Avatar src={comment.photoURL || "/assets/images/user.png"} />
                     <Comment.Content>
-                      <Comment.Author as="a">Matt</Comment.Author>
+                        <Comment.Author as={Link} to={`/profile/${comment.userUid}`}>{ comment.author }</Comment.Author>
                       <Comment.Metadata>
-                        <div>Today at 5:42PM</div>
+                        <div>{moment(comment.commentedAt).fromNow()}</div>
                       </Comment.Metadata>
-                      <Comment.Text>How artistic!</Comment.Text>
+                        <Comment.Text>{ comment.text }</Comment.Text>
                       <Comment.Actions>
                         <Comment.Action>Reply</Comment.Action>
                       </Comment.Actions>
                     </Comment.Content>
-                  </Comment>
+                    </Comment>
+                  )
+                  })}
         
-                  <Comment>
-                    <Comment.Avatar src="/assets/images/user.png" />
-                    <Comment.Content>
-                      <Comment.Author as="a">Elliot Fu</Comment.Author>
-                      <Comment.Metadata>
-                        <div>Yesterday at 12:30AM</div>
-                      </Comment.Metadata>
-                      <Comment.Text>
-                        <p>
-                          This has been very useful for my research. Thanks as well!
-                        </p>
-                      </Comment.Text>
-                      <Comment.Actions>
-                        <Comment.Action>Reply</Comment.Action>
-                      </Comment.Actions>
-                    </Comment.Content>
-                    <Comment.Group>
-                      <Comment>
-                        <Comment.Avatar src="/assets/images/user.png" />
-                        <Comment.Content>
-                          <Comment.Author as="a">Jenny Hess</Comment.Author>
-                          <Comment.Metadata>
-                            <div>Just now</div>
-                          </Comment.Metadata>
-                          <Comment.Text>Elliot you are always so right :)</Comment.Text>
-                          <Comment.Actions>
-                            <Comment.Action>Reply</Comment.Action>
-                          </Comment.Actions>
-                        </Comment.Content>
-                      </Comment>
-                    </Comment.Group>
-                  </Comment>
-        
-                  <Comment>
-                    <Comment.Avatar src="/assets/images/user.png" />
-                    <Comment.Content>
-                      <Comment.Author as="a">Joe Henderson</Comment.Author>
-                      <Comment.Metadata>
-                        <div>5 days ago</div>
-                      </Comment.Metadata>
-                      <Comment.Text>Dude, this is awesome. Thanks so much</Comment.Text>
-                      <Comment.Actions>
-                        <Comment.Action>Reply</Comment.Action>
-                      </Comment.Actions>
-                    </Comment.Content>
-                  </Comment>
-        
-                  <Form reply>
-                    <Form.TextArea />
-                    <Button
-                      content="Add Reply"
-                      labelPosition="left"
-                      icon="edit"
-                      primary
-                    />
-                  </Form>
+            {auth.isLoaded && !auth.isEmpty &&
+              <Form reply onSubmit={handleAddComment}>
+              <Form.TextArea value={comment} onChange={(e) => setComment(e.target.value)} />
+                <Button
+                  content="Add Reply"
+                  labelPosition="left"
+                  icon="edit"
+                  primary
+                />
+              </Form>
+            }
                 </Comment.Group>
               </Segment>
             </div>
