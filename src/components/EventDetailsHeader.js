@@ -4,6 +4,7 @@ import { Segment, Image, Item, Header, Button } from 'semantic-ui-react';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { joinEvent, leaveEvent } from "../actions/eventsActions";
+import { openModal } from '../actions/modalActions';
 
 
 const eventImageStyle = {
@@ -26,7 +27,13 @@ const EventDetailsHeader = ({ event }) => {
   const currentUserUID = useSelector((state) => state.firebase.auth.uid)
 
   const handleJoinEvent = () => {
-    dispatch(joinEvent(event.id));
+
+    if (currentUserUID) {
+        dispatch(joinEvent(event.id));
+    } else {
+        dispatch(openModal("UnAuthModal"));
+    }
+    
   }
 
   const handleLeaveEvent = () => {
@@ -50,7 +57,7 @@ const EventDetailsHeader = ({ event }) => {
                           content={event.title}
                           style={{ color: 'white' }}
                         />
-                        <p>{moment(event.date).format("ddd, MMMM Do YYYY, h:mm:ss a")}</p>
+                        <p>{moment(event.date).format("dddd Do MMMM ")}</p>
                         <p>
                             Hosted by <strong>{event.hostedBy}</strong>
                         </p>

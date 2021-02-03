@@ -3,15 +3,17 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Card, Grid, Header, Icon, Image, Item, List, Menu, Segment } from "semantic-ui-react";
 import moment from 'moment';
-import { isLoaded, useFirebaseConnect } from 'react-redux-firebase';
+import { isEmpty, isLoaded, useFirebaseConnect } from 'react-redux-firebase';
 import Loading from '../components/Loading';
 
 const UserDetailedPage = ({ match }) => {
     useFirebaseConnect([
-       `users/${match.params.id}` // { path: '/todos' } // object notation
+        { path: `users/${match.params.id}` },
+        {path: `events`}
     ])
     
     const user = useSelector((state) => state.firebase.data.users);
+    const firebaseEvents = useSelector((state) => state.firebase.ordered.events)
 
     let profile;
     
@@ -28,6 +30,16 @@ const UserDetailedPage = ({ match }) => {
     
     if (yearOfBirth) {
         age = parseFloat(currentYear) - parseFloat(yearOfBirth);
+    }
+
+
+    let events = []
+
+    if (isLoaded(firebaseEvents) && !isEmpty(firebaseEvents)) {
+        const filteredEvents = firebaseEvents && firebaseEvents.filter((event) => event.value.hostUid === match.params.id)
+        events = filteredEvents.map((event) => {
+            return { id: event.key, ...event.value }
+        })
     }
 
     if (!isLoaded(user)){
@@ -94,37 +106,29 @@ const UserDetailedPage = ({ match }) => {
                         <Segment attached>
                             <Header icon='calendar' content='Events' />
                             <Menu secondary pointing>
-                                <Menu.Item name='All Events' active />
-                                <Menu.Item name='Past Events' />
-                                <Menu.Item name='Future Events' />
-                                <Menu.Item name='Events Hosted' />
+                                <Menu.Item name={`Events hosted by ${profile.displayName}`} active />
                             </Menu>
 
-                            <Card.Group itemsPerRow={5}>
+                            <Card.Group itemsPerRow={4}>
 
-                                <Card>
-                                    <Image src={'/assets/categoryImages/drinks.jpg'} />
+                            {events && events.length > 0 ? events.map((event) => {
+                                return (
+                            
+                                <Card key={event.id} as={Link} to={`/events/${event.id}`}>
+                                    <Image src={`/assets/categoryImages/${event.category}.jpg`} />
                                     <Card.Content>
                                         <Card.Header textAlign='center'>
-                                            Event Title
+                                            {event.title}
                                     </Card.Header>
                                         <Card.Meta textAlign='center'>
-                                            28th March 2018 at 10:00 PM
+                                           {moment(event.date).format('ddd MMM Do YYYY, h:mm A')}
                                     </Card.Meta>
                                     </Card.Content>
                                 </Card>
-
-                                <Card>
-                                    <Image src={'/assets/categoryImages/drinks.jpg'} />
-                                    <Card.Content>
-                                        <Card.Header textAlign='center'>
-                                            Event Title
-                                    </Card.Header>
-                                        <Card.Meta textAlign='center'>
-                                            28th March 2018 at 10:00 PM
-                                    </Card.Meta>
-                                    </Card.Content>
-                                </Card>
+                                )
+                            }) :
+                                <p style={{margin: "1rem"}}>{ profile.displayName } havent't hosted any events yet!</p>
+                            }
 
                             </Card.Group>
                         </Segment>

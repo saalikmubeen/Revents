@@ -21,7 +21,7 @@ const EventDetailsInfo = ({ event }) => {
                     <Icon name="calendar" size="large" color="teal" />
                   </Grid.Column>
                   <Grid.Column width={15}>
-                        <span>{moment(event.date).format("dddd, MMMM Do YYYY, h:mm:ss a")}</span>
+                        <span>{moment(event.date).format("dddd, MMMM Do YYYY, h:mm A")}</span>
                   </Grid.Column>
                 </Grid>
               </Segment>

@@ -9,34 +9,37 @@ import Loading from '../components/Loading';
 const EventsPage = () => {
 
      useFirebaseConnect([
-       'events'       // { path: '/events' } // object notation
-    ])
+        { path: '/events' }, // object notation
+        { path: '/activities', queryParams: ['limitToLast=5'] }
+    ]) 
+    
 
 
     const firebaseEvents = useSelector((state) => state.firebase.ordered.events);
+    const firebaseActivities = useSelector((state) => state.firebase.ordered.activities);
 
     let events;
 
     if (isLoaded(firebaseEvents) && !isEmpty(firebaseEvents)) {
-        events = firebaseEvents.map((event) => {
+        events = firebaseEvents && firebaseEvents.length > 0 && firebaseEvents.map((event) => {
             return { id: event.key, ...event.value, attendees: Object.values(event.value.attendees) }
         });
     }
 
-    if (!isLoaded(firebaseEvents)) {
+    if (!isLoaded(firebaseEvents) || !isLoaded(firebaseActivities)) {
         return <Loading/>
     }
 
     return (
         <Grid columns={2} stackable>
             <Grid.Column width={10}>
-                <EventsList events={ events }/>
+                <EventsList events={ events } />
             </Grid.Column>
             
             <Grid.Column width={6}>
-                <EventActivity />
+                <EventActivity firebaseActivities={firebaseActivities} />
             </Grid.Column>
-    </Grid>
+        </Grid>
     )
 }
 

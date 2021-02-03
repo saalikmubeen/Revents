@@ -23,6 +23,16 @@ export const createEvent = (eventObj) => {
             host: true,
             joinDate: Date.now()
         })
+
+        await firebase.ref('activities').push({
+            type: "New Event",
+            hostedBy: user.displayName,
+            title: eventObj.title,
+            photoURL: user.photoURL || "/assets/images/user.png",
+            timestamp: Date.now(),
+            hostUid: user.uid,
+            eventId: docRef.key
+        });
         
         toastr.success('Success!', 'Event has been created!');
     }
@@ -75,12 +85,38 @@ export const leaveEvent = (eventId) => {
 export const cancelEvent = (eventId, isCancelled) => {
     return async function (dispatch, getState, { getFirebase }) {
         const firebase = getFirebase();
+        const user = firebase.auth().currentUser;
 
-        await firebase.ref(`events/${eventId}`).update({
-            cancelled: isCancelled
-        });
+        const message = isCancelled ? 
+            'Are you sure you want to cancel this event?' :
+            'This will reactivate the event, are you sure?'
+        
+        toastr.confirm(message, {
+            onOk: async () => {
+                const docRef = firebase.ref(`events/${eventId}`);
+                await docRef.update({ cancelled: isCancelled });
+                
+                docRef.once("value").then(async (snapshot) => {
+                    const eventId = snapshot.key;
+                    const event = snapshot.val();
+                    
+                    if (event.cancelled) {
+                        await firebase.ref('activities').push({
+                            type: "Cancel Event",
+                            hostedBy: user.displayName,
+                            title: event.title,
+                            photoURL: user.photoURL || "/assets/images/user.png",
+                            timestamp: Date.now(),
+                            hostUid: user.uid,
+                            eventId: eventId
+                        });
+                    }
+                })
 
-        toastr.success("Success", "Event cancelled successfully!");
+                
+                toastr.success("Success", "Event cancelled successfully!");
+            }
+        })
 
     }
 }

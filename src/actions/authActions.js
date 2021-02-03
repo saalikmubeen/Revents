@@ -6,9 +6,7 @@ export const loginUser = (email, password) => {
         try {
             const firebase = getFirebase();
 
-            const user = await firebase.auth().signInWithEmailAndPassword(email, password);
-
-            console.log(user);
+            await firebase.auth().signInWithEmailAndPassword(email, password);
 
             dispatch(closeModal())
 

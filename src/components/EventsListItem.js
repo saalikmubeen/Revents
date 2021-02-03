@@ -22,7 +22,7 @@ const EventsListItem = ({ event }) => {
                 </Segment>
                 <Segment>
                   <span>
-                    <Icon name="clock" /> {moment(event.date).format("ddd, MMMM Do YYYY, h:mm:ss a")} |
+                    <Icon name="clock" /> {moment(event.date).format("ddd, MMMM Do YYYY, h:mm a")} |
                     <Icon name="marker" /> {event.venue}
                   </span>
                 </Segment>

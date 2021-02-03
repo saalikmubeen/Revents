@@ -22,7 +22,7 @@ const EventForm = ({ match, history, auth }) => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('')
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(null);
   const [city, setCity] = useState('');
   const [venue, setVenue] = useState('');
   const eventId = match.params.id;
@@ -109,7 +109,7 @@ const EventForm = ({ match, history, auth }) => {
                   <Form.Field>
                     <label>Event Date</label>
                   <DatePicker selected={date ? new Date(date) : null} onChange={date => setDate(date)} showTimeSelect onChangeRaw={(e) => e.preventDefault() }
-                      timeFormat="HH:mm" dateFormat="dd LLL yyy h:mm a" placeholderText="Event Date" required />
+                      timeFormat="HH:mm" dateFormat="dd LLL yyy h:mm a" minDate={Date.now()} placeholderText="Event Date" required />
                   </Form.Field> 
       
                   <Button positive type="submit">
