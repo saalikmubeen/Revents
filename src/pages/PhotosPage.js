@@ -35,27 +35,27 @@ const PhotosPage = () => {
         return (
             <Segment>
                 <Header dividing size='large' content='Change profile image' />
-                <Grid>
+                <Grid stackable> 
                     <Grid.Row />
-                    <Grid.Column width={4}>
+                    <Grid.Column  mobile={16} tablet={4} computer={4}>
                         <Header color='teal' sub content='Add Photo' />
                         <ImageUpload setFiles={setFiles} />
-                        <Button.Group >
-                            <Button onClick={handleUploadImage} style={{ width: 100 }} positive icon='check' loading={ loading }/>
-                            <Button  onClick={handleCancelUpload} style={{ width: 100 }} icon='close' />
+                        <Button.Group style={{width: "100%"}}>
+                            <Button onClick={handleUploadImage} positive icon='check' loading={ loading }/>
+                            <Button  onClick={handleCancelUpload} icon='close' />
                         </Button.Group>
                     </Grid.Column>
                     <Grid.Column width={1} />
-                    <Grid.Column width={4}>
+                    <Grid.Column mobile={16} tablet={4} computer={4}>
                         <Header sub color='teal' content='Preview' />
                         {files && files.length > 0 &&
-                            <img src={files[0].preview} style={{ width: "200px", height: "200px", objectFit: "cover" }} alt="profile pic"/>
+                            <img src={files[0].preview} style={{ width: "90%", height: "90%", objectFit: "cover" }} alt="profile pic"/>
                         }
                     </Grid.Column>
                     <Grid.Column width={1} />
-                    <Grid.Column width={4}>
+                    <Grid.Column mobile={16} tablet={4} computer={4}>
                         <Header sub color='teal' content='Your Profile Image' />
-                        <img src={profile.photoURL || '/assets/images/user.png'} alt="profile pic" style={{ width: "200px", height: "200px", objectFit: "cover" }}/>
+                        <img src={profile.photoURL || '/assets/images/user.png'} alt="profile pic" style={{ width: "90%", height: "90%", objectFit: "cover" }}/>
                     </Grid.Column>
 
                 </Grid>

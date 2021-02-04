@@ -14,9 +14,9 @@ const HomePage = ({ history }) => {
                       alt='logo'
                       style={{ marginBottom: 12 }}
                     />
-                    Re-vents
+                    Re-Vents
                   </Header>
-                  <Button as={Link} to="/events" size='huge' inverted>
+                  <Button as={Link} to="/events" size="large" inverted>
                     Get started
                     <Icon name='right arrow' inverted />
                   </Button>

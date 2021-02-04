@@ -43,7 +43,7 @@ const AccountPage = () => {
                       
                   {error && <Label basic color="red">{error}</Label>}
 
-                  <Button size="large" loading={loading} positive content="Update Password" style={{ marginTop: '1rem' }} />
+                  <Button size="large" loading={loading} positive content="Update Password" style={{ marginTop: '1rem', display: "block" }} />
                   </Form>
               </div>
           }  

@@ -120,7 +120,7 @@ export const updatePassword = (newPassword) => {
             dispatch(asyncActionFinish())
 
         } catch (err) {
-            toastr.error("Error!", "Error updating password")
+            toastr.error("Error!", err.message)
             dispatch(asyncActionError(err.message));
         }
     }

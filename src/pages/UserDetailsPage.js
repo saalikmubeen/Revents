@@ -61,6 +61,7 @@ const UserDetailedPage = ({ match, history }) => {
             <>
             {profile &&
                 <Grid>
+                    <Grid.Row>
                     <Grid.Column width={16}>
                         <Segment>
                             <Item.Group>
@@ -78,10 +79,13 @@ const UserDetailedPage = ({ match, history }) => {
 
                         </Segment>
                     </Grid.Column>
-                    <Grid.Column width={12}>
+                    </Grid.Row>
+                    
+                <Grid.Row columns={2}>
+                    <Grid.Column mobile={16} tablet={12} computer={12}>
                         <Segment>
                             <Grid columns={2}>
-                                <Grid.Column width={10}>
+                                <Grid.Column mobile={16} tablet={10} computer={10}>
                                     <Header icon='smile' content={profile.displayName && `About ${profile.displayName}`} />
                                     <p>I am a: <strong>{profile.occupation}</strong></p>
                                     <p>Originally from <strong>{profile.country}</strong></p>
@@ -91,12 +95,12 @@ const UserDetailedPage = ({ match, history }) => {
                                     <p>{profile.about}</p>
 
                                 </Grid.Column>
-                                <Grid.Column width={6}>
+                                <Grid.Column mobile={16} tablet={6} computer={6}>
 
                                     <Header icon='heart outline' content='Interests' />
                                     <List>
                                         {profile.interests && profile.interests.length > 0 ? profile.interests.map((interest, idx) => {
-                                            return <Item key={idx}>
+                                            return <Item key={idx}> 
                                                 <Icon name='heart' />
                                                 <Item.Content>{interest}</Item.Content>
                                             </Item>
@@ -107,24 +111,26 @@ const UserDetailedPage = ({ match, history }) => {
 
                         </Segment>
                     </Grid.Column>
-                    <Grid.Column width={4}>
+                    <Grid.Column mobile={16} tablet={4} computer={4}>
                         
                         {auth.uid === match.params.id &&
                             <Segment>
-                                <Button color='teal' as={Link} to="/account" fluid basic content='Edit Profile' />
+                                <Button color='teal' as={Link} to="/account" fluid basic content='Edit Profile' size="mini"/>
                             </Segment>
                         }
-                       
-                    </Grid.Column>
 
-                    <Grid.Column width={12}>
+                    </Grid.Column>
+                    </Grid.Row>
+
+                    <Grid.Row>
+                    <Grid.Column mobile={16} tablet={12} computer={12}>
                         <Segment attached>
                             <Header icon='calendar' content='Events' />
                             <Menu secondary pointing>
                                 <Menu.Item name={`Events hosted by ${profile.displayName}`} active />
                             </Menu>
 
-                            <Card.Group itemsPerRow={4}>
+                            <Card.Group itemsPerRow={4} stackable>
 
                             {events && events.length > 0 ? events.map((event) => {
                                 return (
@@ -136,7 +142,7 @@ const UserDetailedPage = ({ match, history }) => {
                                             {event.title}
                                     </Card.Header>
                                         <Card.Meta textAlign='center'>
-                                           {moment(event.date).format('ddd MMM Do YYYY, h:mm A')}
+                                        {moment(event.date).format('ddd MMM Do YYYY, h:mm A')}
                                     </Card.Meta>
                                     </Card.Content>
                                 </Card>
@@ -148,6 +154,7 @@ const UserDetailedPage = ({ match, history }) => {
                             </Card.Group>
                         </Segment>
                     </Grid.Column>
+                    </Grid.Row>
                 </Grid>
             }
             </>

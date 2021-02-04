@@ -16,7 +16,7 @@ const NavBar = () => {
       <Container>
         <Menu.Item as={NavLink} exact to='/' header>
           <img src='/assets/images/logo.png' alt='logo' style={{ marginRight: 15 }} />
-          Re-vents
+          Re-Vents
         </Menu.Item>
           <Menu.Item as={NavLink} to='/events' name='Events' />
           
