@@ -33,7 +33,7 @@ ReactDOM.render(
                 closeOnToastrClick/>
             <AuthIsLoaded>
                 <App/>        
-           </AuthIsLoaded>
+            </AuthIsLoaded>
         </BrowserRouter>
         </ReactReduxFirebaseProvider>
     </Provider>, document.getElementById('root'));

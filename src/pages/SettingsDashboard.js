@@ -1,4 +1,6 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
+import { isEmpty, isLoaded } from 'react-redux-firebase';
 import { Link, Redirect, Route } from 'react-router-dom';
 import { Grid, Header, Menu } from 'semantic-ui-react';
 import AboutPage from './AboutPage';
@@ -7,6 +9,12 @@ import BasicsPage from './BasicsPage';
 import PhotosPage from './PhotosPage';
 
 const SettingsDashboard = () => {
+    const auth = useSelector((state) => state.firebase.auth);
+
+    if (isLoaded(auth) && isEmpty(auth)) {
+        return <Redirect to="/events"/>
+    }
+
     return (
         <Grid>
             <Grid.Column width={12}>

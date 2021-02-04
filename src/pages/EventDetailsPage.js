@@ -26,6 +26,7 @@ const EventDetailsPage = ({ match }) => {
   if (!isLoaded(events)) {
     return <Loading />
   }
+  console.log(eventDetails);
   
     return (
         <>

@@ -4,14 +4,19 @@ import { closeModal } from "./modalActions";
 export const loginUser = (email, password) => {
     return async function (dispatch, getState, { getFirebase }) {
         try {
+
+            dispatch({ type: 'AUTH_REQUEST' })
+
             const firebase = getFirebase();
 
             await firebase.auth().signInWithEmailAndPassword(email, password);
 
             dispatch(closeModal())
 
+            dispatch({ type: "AUTH_SUCCESSFUL" });
+
         } catch (err) {
-            console.log(err.message)
+            dispatch({ type: "AUTH_ERROR", payload: { error: err.message } });
         }
         
     }
@@ -20,6 +25,8 @@ export const loginUser = (email, password) => {
 export const registerUser = (userObj) => {
     return async function (dispatch, getState, { getFirebase }) {
         try {
+            dispatch({ type: 'AUTH_REQUEST' })
+            
             const firebase = getFirebase();
 
             await firebase.auth().createUserWithEmailAndPassword(userObj.email, userObj.password);
@@ -42,9 +49,11 @@ export const registerUser = (userObj) => {
             await firebase.ref(`users/${user.uid}`).set({ ...newUser });
 
             dispatch(closeModal())
+
+             dispatch({ type: "AUTH_SUCCESSFUL" });
             
         } catch (err) {
-            console.log(err.message)
+             dispatch({ type: "AUTH_ERROR", payload: { error: err.message } });
         }
         
     }
@@ -61,7 +70,7 @@ export const logoutUser = () => {
             await firebase.auth().signOut();
 
         } catch (err) {
-            console.log(err.message)
+             dispatch({ type: "AUTH_ERROR", payload: { error: err.message } });
         }
         
     }
@@ -88,7 +97,7 @@ export const socialLogin = (authProvider) => {
             })
 
         } catch (err) {
-            console.log(err);
+             dispatch({ type: "AUTH_ERROR", payload: { error: err.message } });
         }
     }
 }
@@ -106,7 +115,7 @@ export const updatePassword = (newPassword) => {
             toastr.success("Success!", "Your password has been updated!");
 
         } catch (err) {
-            console.log(err.message);
+            toastr.error("Error!", "Error updating password")
         }
     }
 }
@@ -124,7 +133,7 @@ export const updateProfile = (user) => {
             toastr.success("Success!", "Your profile has been updated!");
 
         } catch (err) {
-            console.log(err.message);
+            toastr.error("Error!", "Error updating your profile!")
         }
     }
 }
@@ -165,7 +174,7 @@ export const uploadProfilePhoto = (file, fileName) => {
                     toastr.success("Success!", "Photo uploaded successfully!")
     })
         } catch (err) {
-            console.log(err);
+            toastr.error("Error!", "Couldn't set your profile image.")
         }
     }
 }

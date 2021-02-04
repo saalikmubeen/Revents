@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Button, Divider, Form } from 'semantic-ui-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Divider, Form, Label } from 'semantic-ui-react';
 import ModalWrapper from './modals/ModalWrapper';
 import SocialLogin from './SocialLogin';
 import { loginUser } from '../actions/authActions';
@@ -11,6 +11,7 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
 
     const dispatch = useDispatch();
+    const { error, loading } = useSelector((state) => state.auth);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -33,8 +34,10 @@ const LoginForm = () => {
                 <label>Password</label>
                 <input placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
             </Form.Field>
+            
+                {error && <Label basic color="red">{error}</Label>}
 
-            <Button positive type="submit" fluid size="large" color="teal"> Login </Button>
+            <Button loading={loading} positive type="submit" fluid size="large" color="teal" style={{marginTop: '1rem'}}> Login </Button>
 
             </Form>
 

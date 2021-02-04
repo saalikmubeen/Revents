@@ -39,15 +39,10 @@ const AccountPage = () => {
                           <label>Confirm Password</label>
                           <input placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required type="password" /> 
                       </Form.Field>
-                      {error && (
-                          <>
-                              <Label basic color="red">
-                                  {error}
-                              </Label>
-                              <br />
-                          </>
-                      )}
-                      <Button size="large" positive content="Update Password" />
+                      
+                  {error && <Label basic color="red">{error}</Label>}
+
+                  <Button size="large" positive content="Update Password" style={{ marginTop: '1rem' }} />
                   </Form>
               </div>
           }  

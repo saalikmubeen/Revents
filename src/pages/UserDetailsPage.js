@@ -13,6 +13,7 @@ const UserDetailedPage = ({ match }) => {
     ])
     
     const user = useSelector((state) => state.firebase.data.users);
+    const auth = useSelector((state) => state.firebase.auth);
     const firebaseEvents = useSelector((state) => state.firebase.ordered.events)
 
     let profile;
@@ -20,7 +21,6 @@ const UserDetailedPage = ({ match }) => {
     if (user) {
         profile = user[match.params.id]
     }
-
 
 
     const yearOfBirth = profile && profile.dateOfBirth && moment(profile.dateOfBirth).format("YYYY");
@@ -97,9 +97,13 @@ const UserDetailedPage = ({ match }) => {
                         </Segment>
                     </Grid.Column>
                     <Grid.Column width={4}>
-                        <Segment>
-                            <Button color='teal' as={Link} to="/account" fluid basic content='Edit Profile' />
-                        </Segment>
+                        
+                        {auth.uid === match.params.id &&
+                            <Segment>
+                                <Button color='teal' as={Link} to="/account" fluid basic content='Edit Profile' />
+                            </Segment>
+                        }
+                       
                     </Grid.Column>
 
                     <Grid.Column width={12}>
