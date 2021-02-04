@@ -10,6 +10,7 @@ const AccountPage = () => {
 
     const dispatch = useDispatch();
     const authProvider = useSelector((state) => state.firebase.auth.providerData && state.firebase.auth.providerData[0].providerId);
+    const { loading } = useSelector((state) => state.async);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -42,7 +43,7 @@ const AccountPage = () => {
                       
                   {error && <Label basic color="red">{error}</Label>}
 
-                  <Button size="large" positive content="Update Password" style={{ marginTop: '1rem' }} />
+                  <Button size="large" loading={loading} positive content="Update Password" style={{ marginTop: '1rem' }} />
                   </Form>
               </div>
           }  

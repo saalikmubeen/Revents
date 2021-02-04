@@ -5,8 +5,9 @@ import { Button, Card, Grid, Header, Icon, Image, Item, List, Menu, Segment } fr
 import moment from 'moment';
 import { isEmpty, isLoaded, useFirebaseConnect } from 'react-redux-firebase';
 import Loading from '../components/Loading';
+import NotFoundPage from './NotFoundPage';
 
-const UserDetailedPage = ({ match }) => {
+const UserDetailedPage = ({ match, history }) => {
     useFirebaseConnect([
         { path: `users/${match.params.id}` },
         {path: `events`}
@@ -24,15 +25,21 @@ const UserDetailedPage = ({ match }) => {
 
 
     const yearOfBirth = profile && profile.dateOfBirth && moment(profile.dateOfBirth).format("YYYY");
+    const monthOfBirth = profile && profile.dateOfBirth && moment(profile.dateOfBirth).format("M");
     const currentYear = moment(Date.now()).format("YYYY");
+    const currentMonth = moment(Date.now()).format("M");
 
     let age;
     
     if (yearOfBirth) {
         age = parseFloat(currentYear) - parseFloat(yearOfBirth);
+
+        if (parseFloat(monthOfBirth) > parseFloat(currentMonth)) {
+            age--;
+        }
     }
 
-
+ 
     let events = []
 
     if (isLoaded(firebaseEvents) && !isEmpty(firebaseEvents)) {
@@ -45,6 +52,10 @@ const UserDetailedPage = ({ match }) => {
     if (!isLoaded(user)){
         return <Loading />
     }    
+
+    if (isLoaded(user) && !user[match.params.id]) {
+        return <NotFoundPage history={history} />
+    }
 
     return (
             <>

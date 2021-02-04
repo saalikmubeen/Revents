@@ -21,9 +21,7 @@ const EventsPage = () => {
     let events = []
 
     if (isLoaded(firebaseEvents) && !isEmpty(firebaseEvents)) {
-        console.log(firebaseEvents)
         events = firebaseEvents.map((event) => {
-            console.log(event)
             return { id: event.key, ...event.value, attendees: Object.values(event.value.attendees) }
         });
     }

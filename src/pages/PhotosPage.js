@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { isLoaded } from 'react-redux-firebase';
 import { Segment, Header, Divider, Grid, Button } from 'semantic-ui-react';
 import { uploadProfilePhoto } from '../actions/authActions';
 import ImageUpload from '../components/ImageUpload';
+import Loading from '../components/Loading';
 
 const PhotosPage = () => {
     const dispatch = useDispatch();
     const profile = useSelector((state) => state.firebase.profile)
+     const { loading } = useSelector((state) => state.async);
     const [files, setFiles] = useState(null);
 
 
@@ -25,16 +28,20 @@ const PhotosPage = () => {
         setFiles(null);
     }
 
+    if (!isLoaded(profile)) {
+        return <Loading/>
+    }
+
         return (
             <Segment>
-                <Header dividing size='large' content='Your Photos' />
+                <Header dividing size='large' content='Change profile image' />
                 <Grid>
                     <Grid.Row />
                     <Grid.Column width={4}>
                         <Header color='teal' sub content='Add Photo' />
                         <ImageUpload setFiles={setFiles} />
                         <Button.Group >
-                            <Button onClick={handleUploadImage} style={{ width: 100 }} positive icon='check'/>
+                            <Button onClick={handleUploadImage} style={{ width: 100 }} positive icon='check' loading={ loading }/>
                             <Button  onClick={handleCancelUpload} style={{ width: 100 }} icon='close' />
                         </Button.Group>
                     </Grid.Column>

@@ -30,11 +30,8 @@ const EventDetailsInfo = ({ event }) => {
                   <Grid.Column width={1}>
                     <Icon name="marker" size="large" color="teal" />
                   </Grid.Column>
-                  <Grid.Column width={11}>
+                  <Grid.Column width={15}>
                         <span>{ event.venue}</span>
-                  </Grid.Column>
-                  <Grid.Column width={4}>
-                    <Button color="teal" size="tiny" content="Show Map" />
                   </Grid.Column>
                 </Grid>
               </Segment>

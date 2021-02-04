@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { isLoaded } from 'react-redux-firebase';
 import { Button, Divider, Form, Header, Segment, Select } from 'semantic-ui-react';
 import { updateProfile } from '../actions/authActions';
+import Loading from '../components/Loading';
 
 
 const interestOptions = [
@@ -22,6 +24,7 @@ const AboutPage = ({ pristine, submitting }) => {
 
     const dispatch = useDispatch();
     const profile = useSelector((state) => state.firebase.profile);
+     const { loading } = useSelector((state) => state.async);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -38,6 +41,10 @@ const AboutPage = ({ pristine, submitting }) => {
             setInterests(profile.interests || []);
         }
     }, [profile])
+
+    if (!isLoaded(profile)) {
+        return <Loading/>
+    }
 
 
     return (
@@ -92,7 +99,7 @@ const AboutPage = ({ pristine, submitting }) => {
         </Form.Field>
         
         <Divider />
-        <Button size="large" positive content="Update Profile" />
+        <Button size="large" positive content="Update Profile" loading={loading}/>
       </Form>
     </Segment>
   );

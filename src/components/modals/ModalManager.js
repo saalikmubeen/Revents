@@ -14,7 +14,6 @@ const ModalManager = () => {
     const modal = useSelector((state) => state.modal);
 
     const Modal = modal ? modals[modal.modalType] : null
-    console.log(Modal)
     return (
         <>
             {Modal && <Modal />}

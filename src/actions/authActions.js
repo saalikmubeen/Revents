@@ -1,5 +1,6 @@
 import { toastr } from "react-redux-toastr";
 import { closeModal } from "./modalActions";
+import {asyncActionStart, asyncActionFinish, asyncActionError } from './asyncActions';
 
 export const loginUser = (email, password) => {
     return async function (dispatch, getState, { getFirebase }) {
@@ -70,7 +71,7 @@ export const logoutUser = () => {
             await firebase.auth().signOut();
 
         } catch (err) {
-             dispatch({ type: "AUTH_ERROR", payload: { error: err.message } });
+            dispatch({ type: "AUTH_ERROR", payload: { error: err.message } });
         }
         
     }
@@ -106,6 +107,8 @@ export const socialLogin = (authProvider) => {
 export const updatePassword = (newPassword) => {
     return async function (dispatch, getState, { getFirebase }) {
         try {
+            dispatch(asyncActionStart())
+
             const firebase = getFirebase();
 
             const user = firebase.auth().currentUser;
@@ -114,8 +117,11 @@ export const updatePassword = (newPassword) => {
 
             toastr.success("Success!", "Your password has been updated!");
 
+            dispatch(asyncActionFinish())
+
         } catch (err) {
             toastr.error("Error!", "Error updating password")
+            dispatch(asyncActionError(err.message));
         }
     }
 }
@@ -125,6 +131,8 @@ export const updatePassword = (newPassword) => {
 export const updateProfile = (user) => {
     return async function (dispatch, getState, { getFirebase }) {
         try {
+            dispatch(asyncActionStart())
+
             const firebase = getFirebase();
   
             // updates the user inside the firebase database;
@@ -132,8 +140,11 @@ export const updateProfile = (user) => {
 
             toastr.success("Success!", "Your profile has been updated!");
 
+            dispatch(asyncActionFinish())
+
         } catch (err) {
             toastr.error("Error!", "Error updating your profile!")
+            dispatch(asyncActionError(err.message));
         }
     }
 }
@@ -143,6 +154,8 @@ export const updateProfile = (user) => {
 export const uploadProfilePhoto = (file, fileName) => {
     return async function (dispatch, getState, { getFirebase }) {
         try {
+            dispatch(asyncActionStart())
+
             const firebase = getFirebase();
             const user = firebase.auth().currentUser;
 
@@ -172,9 +185,12 @@ export const uploadProfilePhoto = (file, fileName) => {
                     })
 
                     toastr.success("Success!", "Photo uploaded successfully!")
+
+                    dispatch(asyncActionFinish())
     })
         } catch (err) {
             toastr.error("Error!", "Couldn't set your profile image.")
+            dispatch(asyncActionError(err.message));
         }
     }
 }

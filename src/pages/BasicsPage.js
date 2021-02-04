@@ -4,6 +4,8 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { updateProfile } from '../actions/authActions';
+import { isLoaded } from 'react-redux-firebase';
+import Loading from '../components/Loading';
 
 const BasicsPage = () => {
     
@@ -15,6 +17,7 @@ const BasicsPage = () => {
     const [gender, setGender] = useState(null);
 
     const dispatch = useDispatch();
+    const { loading } = useSelector((state) => state.async);
 
     useEffect(() => {
         if (profile) {
@@ -29,6 +32,10 @@ const BasicsPage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(updateProfile({ displayName: name, dateOfBirth: dob, city: homeTown, gender }));
+    }
+
+    if (!isLoaded(profile)) {
+        return <Loading/>
     }
 
         return (
@@ -70,7 +77,7 @@ const BasicsPage = () => {
             </Form.Field>
 
             <Divider/>
-            <Button size='large' positive content='Update Profile'/>
+            <Button size='large' positive content='Update Profile' loading={loading}/>
 
             </Form>
             </Segment>
