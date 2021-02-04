@@ -51,8 +51,7 @@ const EventForm = ({ match, history, auth }) => {
           history.push(`/events/${eventId}`);
       } else {
         console.log(eventObj)
-        dispatch(createEvent({ ...eventObj }));
-        history.push('/events')
+        dispatch(createEvent({ ...eventObj }, history));
       }
   }
 
@@ -73,6 +72,9 @@ const EventForm = ({ match, history, auth }) => {
         setDescription('')
     }
   }, [eventId, event])
+
+  const { loading, error } = useSelector((state) => state.async)
+
 
 
   return (
@@ -112,13 +114,14 @@ const EventForm = ({ match, history, auth }) => {
                       timeFormat="HH:mm" dateFormat="dd LLL yyy h:mm a" minDate={Date.now()} placeholderText="Event Date" required />
                   </Form.Field> 
       
-                  <Button positive type="submit">
+                  <Button positive type="submit" loading={loading}>
                     Submit
                   </Button>
                   
                   <Button type="button" onClick={() => eventId ? history.push(`/events/${eventId}`) : history.push('/events')}>Cancel</Button>
                   {eventId && event && event.value.cancelled ?
                   <Button type="button" color="green" floated="right" onClick={() => dispatch(cancelEvent(eventId, false))}>Reactivate Event</Button> :
+                  eventId && 
                   <Button type="button" color="red" floated="right" onClick={() => dispatch(cancelEvent(eventId, true))}>Cancel Event</Button>}
                 </Form>
                

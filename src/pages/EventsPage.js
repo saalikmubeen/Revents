@@ -18,10 +18,12 @@ const EventsPage = () => {
     const firebaseEvents = useSelector((state) => state.firebase.ordered.events);
     const firebaseActivities = useSelector((state) => state.firebase.ordered.activities);
 
-    let events;
+    let events = []
 
     if (isLoaded(firebaseEvents) && !isEmpty(firebaseEvents)) {
-        events = firebaseEvents && firebaseEvents.length > 0 && firebaseEvents.map((event) => {
+        console.log(firebaseEvents)
+        events = firebaseEvents.map((event) => {
+            console.log(event)
             return { id: event.key, ...event.value, attendees: Object.values(event.value.attendees) }
         });
     }

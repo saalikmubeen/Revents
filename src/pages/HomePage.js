@@ -1,8 +1,9 @@
-import React from 'react'
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Container, Header, Icon, Segment, Image } from 'semantic-ui-react';
 
-const HomePage = () => {
+const HomePage = ({ history }) => {
+  
     return (
                 <Segment inverted textAlign='center' vertical className='masthead'>
                 <Container text>

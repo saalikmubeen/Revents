@@ -6,6 +6,7 @@ import { firebaseReducer, getFirebase } from 'react-redux-firebase';
 import { firebase }  from '../firebase/firebaseConfig';
 import modalReducer from '../reducers/modalReducer';
 import authReducer from '../reducers/authReducer';
+import asyncReducer from '../reducers/asyncReducer';
 
 
 
@@ -16,7 +17,8 @@ const store = createStore(
         toastr: toastrReducer,
         modal: modalReducer,
         firebase: firebaseReducer,
-        auth: authReducer
+        auth: authReducer,
+        async: asyncReducer
     }),
     composeEnhancers(
         applyMiddleware(thunk.withExtraArgument({ getFirebase }))
