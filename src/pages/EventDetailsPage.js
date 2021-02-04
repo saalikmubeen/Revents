@@ -7,9 +7,10 @@ import EventDetailsInfo from '../components/EventDetailsInfo';
 import EventDetailsSidebar from '../components/EventDetailsSidebar';
 import { useFirebaseConnect, isEmpty, isLoaded } from 'react-redux-firebase';
 import Loading from '../components/Loading';
+import NotFoundPage from './NotFoundPage';
 
 
-const EventDetailsPage = ({ match }) => {
+const EventDetailsPage = ({ match, history }) => {
 
     useFirebaseConnect([
        `events`       // { path: '/events' } // object notation
@@ -26,7 +27,10 @@ const EventDetailsPage = ({ match }) => {
   if (!isLoaded(events)) {
     return <Loading />
   }
-  console.log(eventDetails);
+  
+  if (isLoaded(events) && !eventDetails) {
+    return <NotFoundPage history={history} />
+  }
   
     return (
         <>
