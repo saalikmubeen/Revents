@@ -73,7 +73,7 @@ const EventForm = ({ match, history, auth }) => {
     }
   }, [eventId, event])
 
-  const { loading, error } = useSelector((state) => state.async)
+  const { loading } = useSelector((state) => state.async)
 
 
 
@@ -115,7 +115,7 @@ const EventForm = ({ match, history, auth }) => {
                   </Form.Field> 
       
                   <Button positive type="submit" loading={loading}>
-                    Submit
+                    {eventId ? "Update" : "Submit"}
                   </Button>
                   
                   <Button type="button" onClick={() => eventId ? history.push(`/events/${eventId}`) : history.push('/events')}>Cancel</Button>

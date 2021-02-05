@@ -49,11 +49,12 @@ const UserDetailedPage = ({ match, history }) => {
         })
     }
 
+    
     if (!isLoaded(user)){
         return <Loading />
     }    
 
-    if (isLoaded(user) && !user[match.params.id]) {
+    if (isLoaded(user) && !profile) {
         return <NotFoundPage history={history} />
     }
 
